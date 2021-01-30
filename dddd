@@ -1,0 +1,118 @@
+package arregloTDA; 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+public class ArregloTDA extends JFrame {
+    private int[] arreglo, indices;
+    private JTextArea area;
+    private JScrollPane scroll;
+    private JButton bInserta, bElimina, bBusca;
+    private JTextField campo;
+    private int conta = 0, cont = 0;
+
+    ArregloTDA() {
+        setSize(300, 300);
+        setLocation(1200, 400);
+        setTitle("Mi TDA");
+        construirObjetos();
+    }
+    private void construirObjetos() {
+        arreglo = new int[10];
+        indices = new int[10];
+        area = new JTextArea();
+        scroll = new JScrollPane(area);
+        bInserta = new JButton("Insertar");
+        bElimina = new JButton("Elimina");
+        bBusca = new JButton("Busca");
+        campo = new JTextField();
+        setLayout(null);
+        scroll.setBounds(180, 10, 50, 230);
+        add(scroll);
+        bInserta.setBounds(10, 50, 100, 25);
+        add(bInserta);
+        bElimina.setBounds(10, 100, 100, 25);
+        add(bElimina);
+        bBusca.setBounds(10, 150, 100, 25);
+        add(bBusca);
+        campo.setBounds(10, 10, 100, 25);
+        add(campo);
+        bInserta.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int aux = 0;
+                try {
+                    aux = Integer.valueOf(campo.getText());
+                    if (conta < 10) {
+                        arreglo[conta] = aux;
+                        area.setText("");
+                        imprimeArreglo();
+                        conta++;
+                        campo.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Numero maximo de caracteres 10");
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Error");
+                    //area.setText("");                   
+                }
+            }
+        });
+        bElimina.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (conta <= 0) {
+                    JOptionPane.showMessageDialog(null, "Vacio");
+                } else {
+                    conta--;
+                    arreglo[conta] = 0;
+                    area.setText("");
+                    imprimeArreglo();
+                }
+            }
+        });
+        bBusca.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int aux = Integer.valueOf(campo.getText());
+                    area.setText("");
+                    buscaArreglo();
+                    if (cont != 0) {
+                        JOptionPane.showMessageDialog(null, "Se han encontrado " + cont + " coincidencias");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se ah encontrado coincidencias");
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Ingresa digitos");
+                } 
+            }
+        });
+    }
+    public void imprimeArreglo() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println(arreglo[i]);
+            if (conta == i) {
+                area.append("> ");
+            }
+            area.append("[" + i + "]  " + arreglo[i] + "\n");
+        }
+    }
+    public void buscaArreglo() {
+        int aux = Integer.valueOf(campo.getText());
+        cont = 0;
+        indices = new int[10];
+        for (int i = 0; i < 10; i++) {
+            if (arreglo[i] == aux) {
+                cont++;
+                indices[i] = i;
+                area.append(">");
+            }
+            area.append("[" + i + "]  " + arreglo[i] + "\n");
+        }
+    }
+    public static void main(String[] args) {
+        ArregloTDA fr = new ArregloTDA();
+        fr.setVisible(true);
+        fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+}
